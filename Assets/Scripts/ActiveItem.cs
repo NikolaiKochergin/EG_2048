@@ -1,15 +1,21 @@
 using TMPro;
 using UnityEngine;
 
+[SelectionBase]
 public class ActiveItem : MonoBehaviour
 {
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private Transform _visualTransform;
     [SerializeField] private SphereCollider _collider;
     [SerializeField] private SphereCollider _trigger;
+    [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] [Min(0)] private float _dropForce = 1.2f;
 
     private int _level;
     private float _radius;
+
+    public Rigidbody Rigidbody => _rigidbody;
+    public int Level => _level;
 
     [ContextMenu("IncreaseLevel")]
     public void IncreaseLevel()
@@ -18,7 +24,7 @@ public class ActiveItem : MonoBehaviour
         SetLevel(_level);
     }
 
-    public void SetLevel(int level)
+    public virtual void SetLevel(int level)
     {
         _level = level;
 
@@ -31,5 +37,31 @@ public class ActiveItem : MonoBehaviour
         _visualTransform.localScale = ballScale;
         _collider.radius = _radius;
         _trigger.radius = _radius + 0.1f;
+    }
+
+    public void SetupToTube()
+    {
+        _trigger.enabled = false;
+        _collider.enabled = false;
+        _rigidbody.isKinematic = true;
+        _rigidbody.interpolation = RigidbodyInterpolation.None;
+    }
+
+    public void Drop()
+    {
+        _trigger.enabled = true;
+        _collider.enabled = true;
+        _rigidbody.isKinematic = false;
+        _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        transform.parent = null;
+        _rigidbody.velocity = Vector3.down * _dropForce;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        ActiveItem otherItem = other.attachedRigidbody?.GetComponent<ActiveItem>();
+        if (otherItem)
+            if (_level == otherItem.Level)
+                CollapseManager.Instance.Collapse(this, otherItem);
     }
 }
