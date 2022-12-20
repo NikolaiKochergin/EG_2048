@@ -8,20 +8,37 @@ public class ActiveItem : MonoBehaviour
     [SerializeField] private Transform _visualTransform;
     [SerializeField] private SphereCollider _collider;
     [SerializeField] private SphereCollider _trigger;
+    [SerializeField] private Animator _animator;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] [Min(0)] private float _dropForce = 1.2f;
 
     private int _level;
     private float _radius;
-
+    
     public Rigidbody Rigidbody => _rigidbody;
+    public bool IsDead { get; private set; }
+    
+    
     public int Level => _level;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(IsDead) return;
+        
+        ActiveItem otherItem = other.attachedRigidbody?.GetComponent<ActiveItem>();
+        if (otherItem)
+            if (!otherItem.IsDead && _level == otherItem.Level)
+                CollapseManager.Instance.Collapse(this, otherItem);
+    }
 
     [ContextMenu("IncreaseLevel")]
     public void IncreaseLevel()
     {
         _level++;
         SetLevel(_level);
+        _trigger.enabled = false;
+        Invoke(nameof(EnableTrigger), 0.08f);
+        _animator.SetTrigger(nameof(IncreaseLevel));
     }
 
     public virtual void SetLevel(int level)
@@ -37,6 +54,7 @@ public class ActiveItem : MonoBehaviour
         _visualTransform.localScale = ballScale;
         _collider.radius = _radius;
         _trigger.radius = _radius + 0.1f;
+
     }
 
     public void SetupToTube()
@@ -57,11 +75,19 @@ public class ActiveItem : MonoBehaviour
         _rigidbody.velocity = Vector3.down * _dropForce;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Disable()
     {
-        ActiveItem otherItem = other.attachedRigidbody?.GetComponent<ActiveItem>();
-        if (otherItem)
-            if (_level == otherItem.Level)
-                CollapseManager.Instance.Collapse(this, otherItem);
+        _trigger.enabled = false;
+        _rigidbody.isKinematic = true;
+        _collider.enabled = false;
+        IsDead = true;
     }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    private void EnableTrigger() =>
+        _trigger.enabled = true;
 }
