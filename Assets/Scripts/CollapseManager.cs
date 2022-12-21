@@ -26,5 +26,17 @@ public class CollapseManager : MonoBehaviour
         itemA.transform.position = itemB.transform.position;
         itemA.Die();
         itemB.IncreaseLevel();
+        
+        ExplodeBall(itemB.transform.position, itemB.Radius + 0.15f);
+    }
+
+    private void ExplodeBall(Vector3 position, float radius)
+    {
+        Collider[] colliders = Physics.OverlapSphere(position, radius);
+        foreach (var collider in colliders)
+        {
+            collider.attachedRigidbody?.GetComponent<PassiveItem>()?.OnAffect();
+            collider.GetComponent<PassiveItem>()?.OnAffect();
+        }
     }
 }
