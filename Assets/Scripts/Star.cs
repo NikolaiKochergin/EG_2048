@@ -1,12 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-[SelectionBase]
-public class Dynamit : ActiveItem
+public class Star : ActiveItem
 {
-    [Header("Dynamit")] 
+    [Header("Star")] 
     [SerializeField] private float _affectRadius = 1.5f;
-    [SerializeField] private float _forceValue = 1000f;
     [SerializeField] private GameObject _affectArea;
     [SerializeField] private GameObject _effectPrefab;
 
@@ -24,15 +22,7 @@ public class Dynamit : ActiveItem
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, _affectRadius);
         foreach (var collider in colliders)
-        {
-            Rigidbody rigidbody = collider.attachedRigidbody;
-            if (rigidbody)
-            {
-                Vector3 fromTo = (rigidbody.transform.position - transform.position).normalized;
-                rigidbody.AddForce(fromTo * _forceValue + Vector3.up * _forceValue * 0.5f);
-                rigidbody.GetComponent<PassiveItem>()?.OnAffect();
-            }
-        }
+            collider.attachedRigidbody?.GetComponent<ActiveItem>()?.IncreaseLevel();
         
         Instantiate(_effectPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);

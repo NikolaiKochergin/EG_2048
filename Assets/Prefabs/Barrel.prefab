@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e36d40f057953d469a6267e21677621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ItemType: 2
   _barrelExplosion: {fileID: 2219743519304875519, guid: 710a9c2bf5e16094eb292421a964783e, type: 3}
 --- !u!1 &5715786156922668879
 GameObject:

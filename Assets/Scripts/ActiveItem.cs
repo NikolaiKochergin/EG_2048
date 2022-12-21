@@ -2,8 +2,9 @@ using TMPro;
 using UnityEngine;
 
 [SelectionBase]
-public class ActiveItem : MonoBehaviour
+public class ActiveItem : Item
 {
+    [field: SerializeField] protected int Level { get; private set; }
     [SerializeField] private TMP_Text _levelText;
     [SerializeField] private SphereCollider _collider;
     [SerializeField] private SphereCollider _trigger;
@@ -20,7 +21,6 @@ public class ActiveItem : MonoBehaviour
     protected Animator Animator => _animator;
     public float Radius { get; protected set; }
     private bool IsDead { get; set; }
-    protected int Level { get; private set; }
 
     protected virtual void Start()
     {
@@ -86,6 +86,8 @@ public class ActiveItem : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    
+    public virtual void DoEffect(){}
 
     private void EnableTrigger() =>
         _trigger.enabled = true;
