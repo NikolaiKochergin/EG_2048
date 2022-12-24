@@ -15,6 +15,8 @@ public class Stone : PassiveItem
         if (_level > 0)
             for (int i = 0; i < 2; i++)
                 CreateChildRock(_level - 1);
+        else
+            ScoreManager.Instance.AddScore(ItemType, transform.position);
         Die();
     }
 
