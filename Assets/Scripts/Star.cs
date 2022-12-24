@@ -14,6 +14,17 @@ public class Star : ActiveItem
         _affectArea.SetActive(false);
     }
 
+    private void OnValidate()
+    {
+        _affectArea.transform.localScale = Vector3.one * _affectRadius * 2f;
+    }
+
+    public override void DoEffect()
+    {
+        base.DoEffect();
+        StartCoroutine(AffectProcess());
+    }
+
     private IEnumerator AffectProcess()
     {
         _affectArea.SetActive(true);
@@ -26,16 +37,5 @@ public class Star : ActiveItem
         
         Instantiate(_effectPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
-    }
-
-    private void OnValidate()
-    {
-        _affectArea.transform.localScale = Vector3.one * _affectRadius * 2f;
-    }
-
-    public override void DoEffect()
-    {
-        base.DoEffect();
-        StartCoroutine(AffectProcess());
     }
 }
