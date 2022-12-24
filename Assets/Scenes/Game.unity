@@ -967,6 +967,9 @@ MonoBehaviour:
   - ItemType: 4
     Number: 2
     Level: 0
+  - ItemType: 1
+    Number: 2
+    Level: 6
 --- !u!4 &1389828453
 Transform:
   m_ObjectHideFlags: 0
@@ -1183,6 +1186,7 @@ MonoBehaviour:
   - {fileID: 6909490208996814751, guid: d04c17a5c29b32046944544b16c2061b, type: 3}
   - {fileID: 4155714752707068957, guid: c0f4ec6aa74fe08449d1da45c392c7d7, type: 3}
   - {fileID: 5612191792140493988, guid: c26ca0a1563cbd84d94a3b02bc17fccb, type: 3}
+  - {fileID: 3487626767189771958, guid: 65f258836a841f84ab14784328a37445, type: 3}
   _itemScoreParent: {fileID: 1433620223}
   _camera: {fileID: 1443601074}
 --- !u!1 &1443601072

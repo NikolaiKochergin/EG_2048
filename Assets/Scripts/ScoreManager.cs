@@ -31,14 +31,14 @@ public class ScoreManager : MonoBehaviour
                 if (itemType == _scoreElementPrefabs[i].ItemType)
                 {
                     ScoreElement newScoreElement = Instantiate(_scoreElementPrefabs[i], _itemScoreParent);
-                    newScoreElement.Setup(task.Number);
+                    newScoreElement.Setup(task);
                     _scoreElements[taskIndex] = newScoreElement;
                 }
             }
         }
     }
 
-    public void AddScore(ItemType itemType, Vector3 position, int level = 0)
+    public bool AddScore(ItemType itemType, Vector3 position, int level = 0)
     {
         for (int i = 0; i < _scoreElements.Length; i++)
         {
@@ -47,7 +47,10 @@ public class ScoreManager : MonoBehaviour
             if(_scoreElements[i].Level != level) continue;
 
             StartCoroutine(AddScoreAnimation(_scoreElements[i], position));
+            return true;
         }
+
+        return false;
     }
 
     public void CheckWin()

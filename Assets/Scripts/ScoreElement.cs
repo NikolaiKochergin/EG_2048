@@ -31,10 +31,11 @@ public class ScoreElement : MonoBehaviour
         //ScoreManager.Instance.CheckWin();
     }
 
-    public void Setup(int number)
+    public virtual void Setup(Task task)
     {
-        _currentScore = number;
-        _text.text = number.ToString();
+        _currentScore = task.Number;
+        _text.text = task.Number.ToString();
+        _level = task.Level;
     }
 
     private IEnumerator AddAnimation()
