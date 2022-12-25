@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,25 +9,40 @@ public class Creator : MonoBehaviour
     [SerializeField] private Transform _tube;
     [SerializeField] private Transform _spawner;
     [SerializeField] private ActiveItem _ballPrefab;
-
-    private ActiveItem _itemInTube;
-    private ActiveItem _itemInSpawner;
-
     [SerializeField] private Transform _rayTransform;
     [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private TextMeshProUGUI _numberOfBallsText;
+    
+    private ActiveItem _itemInTube;
+    private ActiveItem _itemInSpawner;
+    private int _ballsLeft;
 
     private void Start()
     {
+        _ballsLeft = Level.Instance.NumberOfBalls;
+        UpdateBallsLeftText();
+        
         CreateItemInTube();
         StartCoroutine(MoveToSpawner());
     }
 
+    public void UpdateBallsLeftText() =>
+        _numberOfBallsText.text = _ballsLeft.ToString();
+
     private void CreateItemInTube()
     {
+        if (_ballsLeft == 0)
+        {
+            Debug.Log("Balls Ended");
+            return;
+        }
+        
         int itemLevel = Random.Range(0, 5);
         _itemInTube = Instantiate(_ballPrefab, _tube.position, quaternion.identity);
         _itemInTube.SetLevel(itemLevel);
         _itemInTube.SetupToTube();
+        _ballsLeft--;
+        UpdateBallsLeftText();
     }
 
     private IEnumerator MoveToSpawner()

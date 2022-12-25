@@ -21,10 +21,10 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        _scoreElements = new ScoreElement[_level.Tasks.Count];
-        for (int taskIndex = 0; taskIndex < _level.Tasks.Count; taskIndex++)
+        _scoreElements = new ScoreElement[Level.Instance.Tasks.Count];
+        for (int taskIndex = 0; taskIndex <Level.Instance.Tasks.Count; taskIndex++)
         {
-            Task task = _level.Tasks[taskIndex];
+            Task task = Level.Instance.Tasks[taskIndex];
             ItemType itemType = task.ItemType;
             for (int i = 0; i < _scoreElementPrefabs.Length; i++)
             {
