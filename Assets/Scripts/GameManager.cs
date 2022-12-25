@@ -24,8 +24,10 @@ public class GameManager : MonoBehaviour
         _winObject.SetActive(true);
         OnWin.Invoke();
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        if (currentLevelIndex + 1 >= SceneManager.sceneCountInBuildSettings)
+            currentLevelIndex = 0;
         Progress.Instance.SetLevel(currentLevelIndex + 1);
-        Progress.Instance.Coins += 50;
+        Progress.Instance.AddCoins(50);
     }
 
     public void NextLevel()

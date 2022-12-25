@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.29156286, g: 0.5862265, b: 0.6792453, a: 1}
+  m_Color: {r: 0.2901961, g: 0.58431375, b: 0.6784314, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -622,8 +622,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _coinsText: {fileID: 1459660478}
   _levelText: {fileID: 1161641763}
-  _progress: {fileID: 2087941845}
   _startButton: {fileID: 792039770}
+  _backgroundImage: {fileID: 660320746}
 --- !u!4 &1545803351
 Transform:
   m_ObjectHideFlags: 0
@@ -977,6 +977,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: 1
   Coins: 50
+  BackgroundColor: {r: 0.2901961, g: 0.58431375, b: 0.6784314, a: 1}
+  IsMusicOn: 1
 --- !u!4 &2087941846
 Transform:
   m_ObjectHideFlags: 0
