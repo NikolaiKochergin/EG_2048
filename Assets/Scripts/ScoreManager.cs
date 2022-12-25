@@ -14,17 +14,20 @@ public class ScoreManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            CreateScoreElements();
+        }
         else
             Destroy(gameObject);
     }
 
-    private void Start()
+    private void CreateScoreElements()
     {
-        _scoreElements = new ScoreElement[Level.Instance.Tasks.Count];
-        for (int taskIndex = 0; taskIndex <Level.Instance.Tasks.Count; taskIndex++)
+        _scoreElements = new ScoreElement[_level.Tasks.Count];
+        for (int taskIndex = 0; taskIndex < _level.Tasks.Count; taskIndex++)
         {
-            Task task = Level.Instance.Tasks[taskIndex];
+            Task task = _level.Tasks[taskIndex];
             ItemType itemType = task.ItemType;
             for (int i = 0; i < _scoreElementPrefabs.Length; i++)
             {
@@ -58,7 +61,7 @@ public class ScoreManager : MonoBehaviour
         for (int i = 0; i < _scoreElements.Length; i++)
             if(_scoreElements[i].CurrentScore != 0)
                 return;
-        Debug.Log("Win");
+        GameManager.Instance.Win();
     }
 
     private IEnumerator AddScoreAnimation(ScoreElement scoreElement, Vector3 position)

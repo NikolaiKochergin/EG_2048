@@ -1,8 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CollapseManager : MonoBehaviour
 {
+    public UnityEvent OnCollapse;
+    
     public static CollapseManager Instance;
 
     private void Awake() =>
@@ -40,7 +43,7 @@ public class CollapseManager : MonoBehaviour
             }
         }
         
-        StartCoroutine(CollapseProcess(itemA, itemB));
+        StartCoroutine(CollapseProcess(fromItem, toItem));
     }
 
     private IEnumerator CollapseProcess(ActiveItem fromItem, ActiveItem toItem)
@@ -76,6 +79,8 @@ public class CollapseManager : MonoBehaviour
             else
                toItem.DoEffect();
         }
+        
+        OnCollapse.Invoke();
     }
 
     private void ExplodeBall(Vector3 position, float radius)

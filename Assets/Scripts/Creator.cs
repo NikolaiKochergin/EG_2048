@@ -16,10 +16,13 @@ public class Creator : MonoBehaviour
     private ActiveItem _itemInTube;
     private ActiveItem _itemInSpawner;
     private int _ballsLeft;
+    private Coroutine _waitForLose;
+    private int _maxCreatedBallLevel = 1;
 
     private void Start()
     {
         _ballsLeft = Level.Instance.NumberOfBalls;
+        _maxCreatedBallLevel = Level.Instance.MaxCreatedBallLevel;
         UpdateBallsLeftText();
         
         CreateItemInTube();
@@ -37,7 +40,7 @@ public class Creator : MonoBehaviour
             return;
         }
         
-        int itemLevel = Random.Range(0, 5);
+        int itemLevel = Random.Range(0, _maxCreatedBallLevel + 1);
         _itemInTube = Instantiate(_ballPrefab, _tube.position, quaternion.identity);
         _itemInTube.SetLevel(itemLevel);
         _itemInTube.SetupToTube();
@@ -84,6 +87,35 @@ public class Creator : MonoBehaviour
         _itemInSpawner = null;
         _rayTransform.gameObject.SetActive(false);
         if (_itemInTube)
+        {
             StartCoroutine(MoveToSpawner());
+        }
+        else
+        {
+            _waitForLose = StartCoroutine(WaitForLose());
+            CollapseManager.Instance.OnCollapse.AddListener(ResetLoseTimer);
+            GameManager.Instance.OnWin.AddListener(StopWaitForLose);
+        }
+    }
+
+    private void ResetLoseTimer()
+    {
+        if (_waitForLose != null)
+        {
+            StopCoroutine(_waitForLose);
+            _waitForLose = StartCoroutine(WaitForLose());
+        }
+    }
+
+    private void StopWaitForLose()
+    {
+        if(_waitForLose != null)
+            StopCoroutine(_waitForLose);
+    }
+
+    private IEnumerator WaitForLose()
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.Instance.Lose();
     }
 }
